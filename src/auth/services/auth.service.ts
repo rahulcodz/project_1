@@ -8,6 +8,7 @@ import { RefreshTokenDto } from '../dtos/refresh-token.dto';
 import { RefreshToken } from '../entities/refresh-token.entity';
 import { comparePassword } from '../../common/utils/hash-password.util';
 import { ConfigService } from '@nestjs/config';
+import { UserType } from 'src/enums/user-type/user-type.enum';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,11 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const tokens = await this.generateTokens(user._id, user.email);
+    const tokens = await this.generateTokens(
+      user._id,
+      user.email,
+      user.userType,
+    );
     await this.saveRefreshToken(user._id, tokens.refreshToken);
 
     return tokens;
@@ -70,7 +75,11 @@ export class AuthService {
       revoked: true,
     });
 
-    const tokens = await this.generateTokens(user._id, user.email);
+    const tokens = await this.generateTokens(
+      user._id,
+      user.email,
+      user.userType,
+    );
     await this.saveRefreshToken(user._id, tokens.refreshToken);
 
     return tokens;
@@ -95,17 +104,21 @@ export class AuthService {
    * @param email - The email of the user
    * @returns The generated access and refresh tokens
    */
-  private async generateTokens(userId: string, email: string) {
+  private async generateTokens(
+    userId: string,
+    email: string,
+    userType: UserType,
+  ) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
-        { sub: userId, email },
+        { sub: userId, email, type: userType },
         {
           secret: this.configService.get<string>('JWT_SECRET'),
           expiresIn: '15m',
         },
       ),
       this.jwtService.signAsync(
-        { sub: userId, email },
+        { sub: userId, email, type: userType },
         {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
           expiresIn: '7d',
