@@ -5,7 +5,7 @@ import { RefreshTokenDto } from '../dtos/refresh-token.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
-@ApiTags('auth')
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

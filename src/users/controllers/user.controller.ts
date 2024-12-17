@@ -11,7 +11,7 @@ import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
-@ApiTags('users')
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
