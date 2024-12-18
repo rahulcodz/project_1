@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/user.module';
 import { databaseConfig } from './database/database.config';
 import { JotsModule } from './jots/jots.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { JotsModule } from './jots/jots.module';
     AuthModule,
     UsersModule,
     JotsModule,
+    SearchModule,
   ],
 })
 export class AppModule {}
