@@ -23,6 +23,9 @@ export class User extends Document {
   })
   userType: UserType;
 
+  @Prop({ default: [] })
+  tags: string[];
+
   @Prop({ default: false })
   deleted: boolean;
 }

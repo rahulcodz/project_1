@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { hashPassword } from '../../common/utils/hash-password.util';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -36,16 +42,36 @@ export class UserService {
     return this.userModel.findById(id).exec();
   }
 
-  async getCurrentUser(req: any) {
+  async getCurrentUser(req: Request) {
     try {
       const currentUser = await this.userModel
-        .findById(req.user.userId)
+        .findById(String((req as any).user.userId))
         .select('email userName name userType')
         .exec();
 
       return currentUser;
     } catch (error) {
       throw new NotFoundException(error.message);
+    }
+  }
+
+  async updateUser(req: Request, updateUserDto: UpdateUserDto) {
+    try {
+      const localUser = await this.findById(String(updateUserDto.id));
+      if (localUser.id !== String((req as any).user.userId))
+        throw new BadRequestException(
+          'You do not authorized to perform this action',
+        );
+
+      if (updateUserDto.tags) localUser.tags = updateUserDto.tags;
+      if (updateUserDto.name) localUser.name = updateUserDto.name;
+      if (updateUserDto.userName) localUser.userName = updateUserDto.userName;
+
+      await localUser.save();
+
+      return 'Details updated';
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
     }
   }
 }
