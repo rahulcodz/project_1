@@ -1,7 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsArray, IsOptional, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
-export class CreateJotsDto {
+export class UpdateJotsDto {
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsNotEmpty({ message: 'User id is not provided' })
+  id: string;
+
   @ApiProperty()
   @IsString()
   title: string;

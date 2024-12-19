@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateJotsDto } from '../dtos/create-jots.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Jots } from '../entities/jots.entity';
@@ -7,6 +12,7 @@ import { UserService } from 'src/users';
 import { JotComments } from '../entities/comments.entity';
 import { CommentsService } from './comments.service';
 import { VoteService } from './vote.service';
+import { UpdateJotsDto } from '../dtos/update-jots.dto';
 
 @Injectable()
 export class JotsService {
@@ -46,10 +52,9 @@ export class JotsService {
 
   async create(req: Request, jot: CreateJotsDto) {
     try {
-      const user = await this.userService.getCurrentUser(req);
       const res = {
         ...jot,
-        user: user,
+        user: (req as any).user.userId,
       };
 
       const createdJots = new this.jotsModel({
@@ -59,6 +64,24 @@ export class JotsService {
       return 'Jot saved !!!';
     } catch (error) {
       throw new NotFoundException(error.message);
+    }
+  }
+
+  async update(req: Request, jot: UpdateJotsDto) {
+    try {
+      const currentJot = await this.jotsModel
+        .findById(String(jot.id))
+        .select('title description JotsType user')
+        .exec();
+
+      if ((req as any).user.userId !== String(currentJot.user)) {
+        throw new BadRequestException('Something went wrong');
+      }
+      Object.assign(currentJot, jot);
+      await currentJot.save();
+      return 'Details saved !!!';
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
     }
   }
 

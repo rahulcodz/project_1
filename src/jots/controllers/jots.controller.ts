@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { CommentsService } from '../services/comments.service';
 import { AddCommentDto } from '../dtos/add-comment.dto';
 import { AddVoteDto } from '../dtos/add-vote.dto';
 import { VoteService } from '../services/vote.service';
+import { UpdateJotsDto } from '../dtos/update-jots.dto';
 
 @ApiTags('Jots')
 @Controller('jots')
@@ -40,6 +42,11 @@ export class JotsController {
   @Post()
   async create(@Request() req, @Body() jot: CreateJotsDto) {
     return this.jotsService.create(req, jot);
+  }
+
+  @Put()
+  async update(@Request() req, @Body() jot: UpdateJotsDto) {
+    return this.jotsService.update(req, jot);
   }
 
   @Post('/comment/add')

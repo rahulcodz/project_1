@@ -15,8 +15,8 @@ export class Jots extends Document {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
   user: User;
 
-  //   @Prop({ required: true })
-  //   password: string;
+  @Prop({ default: [] })
+  tags: string[];
 
   @Prop({
     type: Number,
