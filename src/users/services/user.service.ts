@@ -10,12 +10,14 @@ import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { hashPassword } from '../../common/utils/hash-password.util';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { CredibilityService } from './credibility.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
+    private readonly credibilityService: CredibilityService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -70,6 +72,14 @@ export class UserService {
       await localUser.save();
 
       return 'Details updated';
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async refreshCredibility() {
+    try {
+      return this.credibilityService.refreshCredibility();
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

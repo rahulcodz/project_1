@@ -7,23 +7,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { JotComments } from '../entities/comments.entity';
 import { Model } from 'mongoose';
 import { AddCommentDto } from '../dtos/add-comment.dto';
-import { UserService } from 'src/users';
 
 @Injectable()
 export class CommentsService {
   constructor(
     @InjectModel(JotComments.name)
     private readonly commentsModel: Model<JotComments>,
-    private readonly userService: UserService,
   ) {}
 
   async addComment(req: Request, jotComment: AddCommentDto) {
     try {
-      const user = await this.userService.getCurrentUser(req);
-
       const payload = {
         ...jotComment,
-        user: user,
+        user: String((req as any).user.userId),
       };
 
       const data = new this.commentsModel(payload);

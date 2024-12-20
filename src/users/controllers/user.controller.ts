@@ -43,4 +43,9 @@ export class UserController {
   async getCurrentUser(@Request() req) {
     return this.userService.getCurrentUser(req);
   }
+
+  @Post('credibility')
+  async credibility() {
+    return this.userService.refreshCredibility();
+  }
 }

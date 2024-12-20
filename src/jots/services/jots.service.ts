@@ -8,8 +8,6 @@ import { CreateJotsDto } from '../dtos/create-jots.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Jots } from '../entities/jots.entity';
 import { Model } from 'mongoose';
-import { UserService } from 'src/users';
-import { JotComments } from '../entities/comments.entity';
 import { CommentsService } from './comments.service';
 import { VoteService } from './vote.service';
 import { UpdateJotsDto } from '../dtos/update-jots.dto';
@@ -19,7 +17,6 @@ export class JotsService {
   constructor(
     @InjectModel(Jots.name)
     private readonly jotsModel: Model<Jots>,
-    private readonly userService: UserService,
     private readonly commentsService: CommentsService,
     private readonly voteService: VoteService,
   ) {}

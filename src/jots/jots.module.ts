@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Jots, JotsSchema } from './entities/jots.entity';
 import { JotsController } from './controllers/jots.controller';
@@ -11,11 +11,11 @@ import { VoteService } from './services/vote.service';
 
 @Module({
   imports: [
-    UsersModule,
+    forwardRef(() => UsersModule),
     MongooseModule.forFeature([
       { name: Jots.name, schema: JotsSchema },
-      { name: JotVote.name, schema: JotsVoteSchema },
       { name: JotComments.name, schema: JotsCommentsSchema },
+      { name: JotVote.name, schema: JotsVoteSchema },
     ]),
   ],
   controllers: [JotsController],
