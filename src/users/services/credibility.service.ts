@@ -8,7 +8,7 @@ export class CredibilityService {
   async refreshCredibility() {
     try {
       const data = await this.voteService.countUserVote(
-        '67615144d6063a197f5cb8c5',
+        '676d00622ce722699cba9dfc',
       );
       console.log('🚀 ~ CredibilityService ~ refreshCredibility ~ data:', data);
     } catch (error) {

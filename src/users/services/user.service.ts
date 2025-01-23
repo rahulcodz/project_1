@@ -79,7 +79,8 @@ export class UserService {
 
   async refreshCredibility() {
     try {
-      return this.credibilityService.refreshCredibility();
+      await this.credibilityService.refreshCredibility();
+      return 'Successfully refreshed user credibility.';
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

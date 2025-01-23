@@ -24,9 +24,43 @@ export class JotsService {
   async getJots() {
     try {
       const response = await this.jotsModel
-        .find({ deleted: false })
-        .select('title description createdAt')
-        .populate('user', 'name userName userType')
+        .aggregate([
+          {
+            $match: { deleted: false },
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user',
+              foreignField: '_id',
+              as: 'user',
+            },
+          },
+          {
+            $unwind: {
+              path: '$user',
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $addFields: {
+              commentCount: {
+                $size: { $ifNull: ['$comments', []] },
+              },
+              test: 'asd',
+            },
+          },
+          {
+            $project: {
+              title: 1,
+              description: 1,
+              createdAt: 1,
+              commentCount: 1,
+              test: '',
+              user: { name: 1, userName: 1, userType: 1 },
+            },
+          },
+        ])
         .exec();
       return response;
     } catch (error) {
@@ -38,6 +72,7 @@ export class JotsService {
     try {
       const response = await this.jotsModel
         .find({ deleted: false, user: (req as any).user.userId })
+        .populate('tags')
         .select('title description createdAt')
         .exec();
 

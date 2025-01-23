@@ -17,6 +17,8 @@ import { AddCommentDto } from '../dtos/add-comment.dto';
 import { AddVoteDto } from '../dtos/add-vote.dto';
 import { VoteService } from '../services/vote.service';
 import { UpdateJotsDto } from '../dtos/update-jots.dto';
+import { AddCommentVoteDto } from '../dtos/add-comment-vote';
+import { CommentsVoteService } from '../services/comment-vote.service';
 
 @ApiTags('Jots')
 @Controller('jots')
@@ -27,6 +29,7 @@ export class JotsController {
     private readonly jotsService: JotsService,
     private readonly commentService: CommentsService,
     private readonly voteService: VoteService,
+    private readonly commentVoteService: CommentsVoteService,
   ) {}
 
   @Get()
@@ -72,5 +75,10 @@ export class JotsController {
   @Post('/vote')
   async addVote(@Request() req, @Body() vote: AddVoteDto) {
     return this.voteService.addVote(req, vote);
+  }
+
+  @Post('/comment/vote')
+  async addCommentVote(@Request() req, @Body() commentVote: AddCommentVoteDto) {
+    return this.commentVoteService.addCommentVote(req, commentVote);
   }
 }

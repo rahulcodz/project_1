@@ -10,7 +10,8 @@ services:
     environment:
       - NODE_ENV=production
       - MONGODB_URI=mongodb://mongodb:27017/nestjs-app
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=e65f9f3bbfd58f3db72cbcb42996d7d1e1a57469a9d38e557a6ed1d08863e1ff
+      - JWT_REFRESH_SECRET=e65f9f3bbfd58f3db72cbcb42996d7d1e1a57469a9d38e557a6ed1d08863e1jj
     depends_on:
       - mongodb
     networks:

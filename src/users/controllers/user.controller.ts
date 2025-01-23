@@ -6,6 +6,7 @@ import {
   UseGuards,
   Request,
   Put,
+  HttpCode,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from '../services/user.service';
@@ -45,6 +46,7 @@ export class UserController {
   }
 
   @Post('credibility')
+  @HttpCode(200)
   async credibility() {
     return this.userService.refreshCredibility();
   }

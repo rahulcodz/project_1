@@ -8,6 +8,11 @@ import { JotComments, JotsCommentsSchema } from './entities/comments.entity';
 import { CommentsService } from './services/comments.service';
 import { JotsVoteSchema, JotVote } from './entities/vote.entity';
 import { VoteService } from './services/vote.service';
+import {
+  JotCommentVote,
+  JotCommentVoteSchema,
+} from './entities/comment-vote.entity';
+import { CommentsVoteService } from './services/comment-vote.service';
 
 @Module({
   imports: [
@@ -16,10 +21,11 @@ import { VoteService } from './services/vote.service';
       { name: Jots.name, schema: JotsSchema },
       { name: JotComments.name, schema: JotsCommentsSchema },
       { name: JotVote.name, schema: JotsVoteSchema },
+      { name: JotCommentVote.name, schema: JotCommentVoteSchema },
     ]),
   ],
   controllers: [JotsController],
-  providers: [JotsService, CommentsService, VoteService],
-  exports: [JotsService, CommentsService, VoteService],
+  providers: [JotsService, CommentsService, VoteService, CommentsVoteService],
+  exports: [JotsService, CommentsService, VoteService, CommentsVoteService],
 })
 export class JotsModule {}

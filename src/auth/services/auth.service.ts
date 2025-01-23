@@ -114,14 +114,14 @@ export class AuthService {
         { sub: userId, email, type: userType },
         {
           secret: this.configService.get<string>('JWT_SECRET'),
-          expiresIn: '15m',
+          expiresIn: '7d',
         },
       ),
       this.jwtService.signAsync(
         { sub: userId, email, type: userType },
         {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-          expiresIn: '7d',
+          expiresIn: '30d',
         },
       ),
     ]);
@@ -139,7 +139,7 @@ export class AuthService {
    */
   private async saveRefreshToken(userId: string, token: string) {
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days from now
+    expiresAt.setDate(expiresAt.getDate() + 7);
 
     const refreshToken = new this.refreshTokenModel({
       token,

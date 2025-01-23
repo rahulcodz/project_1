@@ -25,7 +25,11 @@ export class Jots extends Document {
   })
   JotsType: UserType;
 
-  @Prop({ type: [JotComments], default: [] })
+  @Prop({
+    type: [MongooseSchema.Types.ObjectId],
+    ref: 'JotComments',
+    default: [],
+  })
   comments: JotComments[];
 
   @Prop({ default: false })
